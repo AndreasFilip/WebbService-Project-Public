@@ -36,7 +36,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity {
-
+    //New comment
     @Bind(R.id.addButton) Button addButton;
     @Bind(R.id.listView) ListView listView;
     String editTextStringForNewList;

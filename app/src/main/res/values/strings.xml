@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">ListProject</string>
+
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="EnterNameofList">Please Enter the name of your list</string>
+    <string name="EnterNameofTask">Please Enter the name of your task</string>
+    <string name="EditNameofTask">Please edit your task</string>
+    <string name="addlistButtonText">Add list</string>
+    <string name="cancelAddlistButtonText">Cancel</string>
+    <string name="toastDidntEnteraName">You didn\'t enter a name!</string>
+    <string name="toastTextisTheSame">You text didn\'t differ!</string>
+    <string name="title">Title</string>
+    <string name="addTask">Add Task</string>
+    <string name="editTask">Edit Task</string>
+    <string name="description">Description</string>
+    <string name="done">Done?</string>
+    <color name="white">#FFFFFF</color>
+</resources>

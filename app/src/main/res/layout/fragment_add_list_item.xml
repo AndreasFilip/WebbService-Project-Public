@@ -1,0 +1,53 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_centerInParent="true"
+    android:background="@color/white"
+    tools:context="com.example.robin.listproject.AddListItemFragment">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/EnterNameofList"
+        android:id="@+id/textViewTop"
+        android:layout_gravity="center_horizontal|top" />
+
+    <EditText
+        android:layout_marginBottom="150dp"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/editText"
+        android:layout_gravity="center" />
+    <EditText
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/editText2"
+        android:hint="@string/description"
+        android:visibility="gone"
+        android:layout_gravity="center" />
+
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="@string/done"
+        android:id="@+id/checkBox"
+        android:layout_marginBottom="100dp"
+        android:visibility="gone"
+        android:layout_gravity="center_horizontal|bottom" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/addlistButtonText"
+        android:id="@+id/addButton"
+        android:onClick="onFragmentListItemAddButtonClick"
+        android:layout_gravity="right|bottom" />
+    <Button
+        android:visibility="gone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/cancelAddlistButtonText"
+        android:id="@+id/buttonCancel"
+        android:layout_gravity="left|bottom" />
+
+</FrameLayout>

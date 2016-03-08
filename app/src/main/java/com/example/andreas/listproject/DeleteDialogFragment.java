@@ -8,9 +8,9 @@ import android.support.v7.app.AlertDialog;
 import android.util.Log;
 
 /**
- * A simple {@link Fragment} subclass.
+ * Dialog fragment used for asking the user if he/she wants to remove a listItem
  */
-public class EditDialogFragment extends android.support.v4.app.DialogFragment {
+public class DeleteDialogFragment extends android.support.v4.app.DialogFragment {
     MainActivity mainActivity;
     TaskActivity taskActivity;
     Bundle bundle;

@@ -173,7 +173,7 @@ public class MyTask1 extends AsyncTask<String, Void, String> {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
                 positionInList = position;
-                EditDialogFragment removeListItemFragment = new EditDialogFragment();
+                DeleteDialogFragment removeListItemFragment = new DeleteDialogFragment();
                 Bundle bundle = new Bundle();
                 bundle.putString("KEY","MAIN ACTIVITY");
                 removeListItemFragment.setArguments(bundle);

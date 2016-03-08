@@ -89,7 +89,7 @@ public class TaskActivity extends AppCompatActivity {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
                 positionInList = position;
-                removeListItemFragment = new EditDialogFragment();
+                removeListItemFragment = new DeleteDialogFragment();
                 Bundle bundle = new Bundle();
                 bundle.putString("KEY","TASK ACTIVITY");
                 removeListItemFragment.setArguments(bundle);

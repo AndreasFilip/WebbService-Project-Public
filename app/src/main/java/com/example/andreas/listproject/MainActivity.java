@@ -37,15 +37,15 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity {
-    //New comment
+    //New comment to verify that branch is created
     @Bind(R.id.addButton) Button addButton;
     @Bind(R.id.listView) ListView listView;
     String editTextStringForNewList;
     int positionInList;
     ArrayAdapter arrayAdapter;
-    public ArrayList<ToDoList> toDoLists;
-    public JSONArray lists;
-    public JSONObject listsWithName;
+    protected ArrayList<ToDoList> toDoLists;
+    protected JSONArray lists;
+    protected JSONObject listsWithName;
     MainActivity mainActivity;
     android.support.v4.app.FragmentManager fm;
     android.support.v4.app.DialogFragment removeListItemFragment;
@@ -59,9 +59,11 @@ public class MainActivity extends AppCompatActivity {
         t.execute("GET", "lists/");
         setListAdapter();
     }
-    //Function for setting the ArrayAdapter to the ListView
+    /**
+     *Function for setting the ArrayAdapter to the ListView
+     */
     private void setListAdapter(){
-        arrayAdapter = new PersonArrayAdapter(this, R.layout.list_item_layout, toDoLists);
+        arrayAdapter = new ToDoListArrayAdapter(this, R.layout.list_item_layout, toDoLists);
         listView.setAdapter(arrayAdapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -77,9 +79,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
                 positionInList = position;
-                removeListItemFragment = new EditDialogFragment();
+                removeListItemFragment = new DeleteDialogFragment();
                 Bundle bundle = new Bundle();
-                bundle.putString("KEY","MAIN ACTIVITY");
+                bundle.putString("KEY", "MAIN ACTIVITY");
                 removeListItemFragment.setArguments(bundle);
                 Log.i("TAG", toDoLists.get(positionInList).getId());
                 removeListItemFragment.show(fm, "fragment_remove_list_item");
@@ -87,7 +89,9 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-    //Class that sends requests to server
+    /**
+     *Class that sends requests to server
+     */
     private class MyTask extends AsyncTask<String, Void, String>{
         HttpURLConnection connection;
         URL url;
@@ -95,7 +99,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected void onPreExecute(){
         }
-        @Override //task.execute("GET", "list/")
+        @Override
         protected String doInBackground(String... params) { //params[0] = method, params[1] = URI
             try {
                 url = new URL(URLEN + params[1]);
@@ -124,8 +128,13 @@ public class MainActivity extends AppCompatActivity {
                             response.append(inputLine);
                         }
                         in.close();
-                        lists = new JSONArray(response.toString());
-                        listsWithName = new JSONObject();
+                        if(!isResponseNull(response)) {
+                            lists = new JSONArray(response.toString());
+                            listsWithName = new JSONObject();
+                        }
+                        else {
+                            Log.i("TAG","Response was null");
+                        }
                         connection.disconnect();
                         break;
                     case "POST":
@@ -200,18 +209,20 @@ public class MainActivity extends AppCompatActivity {
             arrayAdapter.notifyDataSetChanged();
         }
     }
-    //ArrayAdapter for ListView
-    private class PersonArrayAdapter extends ArrayAdapter<ToDoList> {
+    /**
+     *ArrayAdapter for ListView
+     */
+    private class ToDoListArrayAdapter extends ArrayAdapter<ToDoList> {
 
         private final Context context;
         private final ArrayList<ToDoList> toDoListList;
 
-        public PersonArrayAdapter(Context context, int resource, List<ToDoList> toDoLists) {
+        protected ToDoListArrayAdapter(Context context, int resource, List<ToDoList> toDoLists) {
             super(context, resource, toDoLists);
             this.context = context;
             this.toDoListList = (ArrayList) toDoLists;
         }
-        //Obligatory method for listAdapter/listview
+
         @Override
         public View getView(int position, View convertView, ViewGroup parent){
             LayoutInflater inflater = (LayoutInflater) context
@@ -223,27 +234,30 @@ public class MainActivity extends AppCompatActivity {
             return itemView;
         }
     }
-    //User pressed yes in delete dialog fragment!
-    public void deleteList(){
+    /**
+     * Function to load list after user has removed a list
+     */
+    protected void deleteList(){
         MyTask t2 = new MyTask();
-        t2.execute("DELETE", "lists/" + toDoLists.get(positionInList).getId() + "/"); // 33/ för min lista
+        t2.execute("DELETE", "lists/" + toDoLists.get(positionInList).getId() + "/");
         Log.i("TAG", toDoLists.get(positionInList).getId());
         MyTask t3 = new MyTask();
         t3.execute("GET", "lists/");
     }
-    //Creates an instance of necessary variables and sets on click listener for add list item button
-    public void init(){
+    /**
+     *Creates an instance of necessary variables and sets on click listener for add list item button
+     */
+    private void init(){
         toDoLists = new ArrayList<>();
         mainActivity = this;
         fm = getSupportFragmentManager();
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Create new fragment and transaction
                 Fragment addListItemFragment = new AddListItemFragment();
                 FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
                 Bundle bundle = new Bundle();
-                bundle.putString("KEY","MAIN ACTIVITY");
+                bundle.putString("KEY", "MAIN ACTIVITY");
                 addListItemFragment.setArguments(bundle);
                 transaction.replace(R.id.relativeLayout, addListItemFragment);
                 transaction.addToBackStack(null);
@@ -252,23 +266,46 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-    //Gets user-inputted text from an EditText in the AddListItemFragment for the creation of a new listItem
-    public void getStringForNewListItem(String toRetrive){
-        editTextStringForNewList = toRetrive;
+    /**
+     * Gets user-inputted text from an EditText in the AddListItemFragment for the creation of a new listItem
+     * @param textFromEditText String to contain the text from the EditText
+     */
+    protected void getStringForNewListItem(String textFromEditText){
+        editTextStringForNewList = textFromEditText;
         MyTask t5 = new MyTask();
         t5.execute("POST", "lists/");
         MyTask t4 = new MyTask();
         t4.execute("GET", "lists/");
         arrayAdapter.notifyDataSetChanged();
     }
-    //method for hiding the soft-keyboard after user has pressed , yes after creating a new listItem
+    /**
+     *Method for hiding the soft-keyboard after user has pressed , yes after creating a new listItem
+     * @param input
+     */
     protected void hideSoftKeyboard(EditText input) {
         input.setInputType(0);
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(input.getWindowToken(), 0);
     }
-    public FragmentManager getFm(){
+    /**
+     * Method for retrieving a FragmentManager in a Fragment
+     * @return A FragmentManager
+     */
+    protected FragmentManager getFm(){
         fm = getSupportFragmentManager();
         return fm;
+    }
+    /**
+     * @param response String buffer response from a HTTP request
+     * @return true if response is null, false if it isn't
+     */
+    protected boolean isResponseNull(StringBuffer response){
+        String nill = "";
+        if(!response.toString().equals(nill)) {
+            return false;
+        }
+        else{
+            return true;
+        }
     }
 }

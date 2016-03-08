@@ -98,6 +98,7 @@ public class MainActivity extends AppCompatActivity {
         private String URLEN = "http://api.cmdemo.se/";
         @Override
         protected void onPreExecute(){
+            //TODO Check if user has network!
         }
         @Override
         protected String doInBackground(String... params) { //params[0] = method, params[1] = URI
@@ -280,7 +281,7 @@ public class MainActivity extends AppCompatActivity {
     }
     /**
      *Method for hiding the soft-keyboard after user has pressed , yes after creating a new listItem
-     * @param input
+     * @param input the EditText which keyboard you want to close
      */
     protected void hideSoftKeyboard(EditText input) {
         input.setInputType(0);

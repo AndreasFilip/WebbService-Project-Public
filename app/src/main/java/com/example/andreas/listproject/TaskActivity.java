@@ -37,10 +37,10 @@ import butterknife.ButterKnife;
 public class TaskActivity extends AppCompatActivity {
 
     android.support.v4.app.DialogFragment removeListItemFragment;
-    public int idOfTask;
-    public String isCheck;
-    public String title;
-    public String description;
+    protected int idOfTask;
+    protected String isCheck;
+    protected String title;
+    protected String description;
     Task task;
     TaskActivity taskActivity;
     String position;
@@ -48,9 +48,9 @@ public class TaskActivity extends AppCompatActivity {
     @Bind(R.id.listView) ListView listView;
     int positionInList;
     ArrayAdapter arrayAdapter;
-    public ArrayList<Task> tasks;
-    public JSONArray lists2;
-    public JSONObject listsWithName;
+    protected ArrayList<Task> tasks;
+    protected JSONArray lists2;
+    protected JSONObject listsWithName;
     android.support.v4.app.FragmentManager fm;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,7 +64,7 @@ public class TaskActivity extends AppCompatActivity {
         setListAdapter();
     }
     private void setListAdapter(){
-        arrayAdapter = new PersonArrayAdapter(this, R.layout.list_item_layout, tasks);
+        arrayAdapter = new TaskArrayAdapter(this, R.layout.list_item_layout, tasks);
         listView.setAdapter(arrayAdapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -72,7 +72,6 @@ public class TaskActivity extends AppCompatActivity {
                 positionInList = position;
                 int id2 = tasks.get(positionInList).getId();
                 Log.i("TAG", "id:" + id2 + " " + position);
-                // Might have to initilize task
                 task = tasks.get(positionInList);
                 Fragment addTaskItemFragment = new AddListItemFragment();
                 FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
@@ -105,15 +104,11 @@ public class TaskActivity extends AppCompatActivity {
 
         HttpURLConnection connection;
         URL url;
-        //Target url
         private String URLEN = "http://api.cmdemo.se/";
 
         @Override
         protected void onPreExecute(){
-
-
         }
-
         @Override
         protected String doInBackground(String... params) { //params[0] = method, params[1] = URI
             try {
@@ -121,49 +116,42 @@ public class TaskActivity extends AppCompatActivity {
             } catch (MalformedURLException e) {
                 e.printStackTrace();
             }
-
-
             try {
                 connection = (HttpURLConnection)url.openConnection();
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
             try {
                 connection.setRequestMethod(params[0]);
-
                 switch(params[0]){
                     case "GET":
                         connection.setDoOutput(false); //No body = false
                         connection.setDoInput(true); //We want response from server = true
                         connection.setRequestProperty("Accept", "application/json");
                         connection.connect();
-
                         int responseCode = connection.getResponseCode();
                         Log.i("responsecode", "The responsecode was: " + responseCode);
-
-
                         BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
                         String inputLine;
                         StringBuffer response = new StringBuffer();
-
                         while ((inputLine = in.readLine()) != null) {
                             response.append(inputLine);
                         }
                         in.close();
-
-                        lists2 = new JSONArray(response.toString());
-                        listsWithName = (JSONObject) lists2.get(0);
+                        if(!isResponseNull(response)) {
+                            lists2 = new JSONArray(response.toString());
+                            listsWithName = (JSONObject) lists2.get(0);
+                        }
+                        else {
+                            Log.i("TAG","Response was null");
+                        }
                         connection.disconnect();
-
-
                         break;
                     case "PUT" :
                         connection.setDoOutput(true);
                         connection.setDoInput(true);
                         connection.setRequestProperty("Content-type", "application/json");
                         connection.setRequestProperty("Accept", "application/json");
-
                         connection.connect();
                         OutputStream os = connection.getOutputStream();
                         BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
@@ -175,18 +163,14 @@ public class TaskActivity extends AppCompatActivity {
                         writer.flush();
                         writer.close();
                         os.close();
-
                         BufferedReader in2 = new BufferedReader(new InputStreamReader(connection.getInputStream()));
                         String inputLine2;
                         StringBuffer response2 = new StringBuffer();
-
                         while ((inputLine2 = in2.readLine()) != null) {
                             response2.append(inputLine2);
                         }
                         in2.close();
-
                         Log.i("responsetext", response2.toString());
-
                         connection.disconnect();
                         break;
                     case "POST":
@@ -194,7 +178,6 @@ public class TaskActivity extends AppCompatActivity {
                         connection.setDoInput(true);
                         connection.setRequestProperty("Content-type", "application/json");
                         connection.setRequestProperty("Accept", "application/json");
-
                         connection.connect();
                         OutputStream os1 = connection.getOutputStream();
                         BufferedWriter writer1 = new BufferedWriter(new OutputStreamWriter(os1, "UTF-8"));
@@ -206,16 +189,13 @@ public class TaskActivity extends AppCompatActivity {
                         writer1.flush();
                         writer1.close();
                         os1.close();
-
                         BufferedReader in4 = new BufferedReader(new InputStreamReader(connection.getInputStream()));
                         String inputLine4;
                         StringBuffer response4 = new StringBuffer();
-
                         while ((inputLine4 = in4.readLine()) != null) {
                             response4.append(inputLine4);
                         }
                         in4.close();
-
                         Log.i("TAG", response4.toString());
                         connection.disconnect();
                         break;
@@ -224,15 +204,11 @@ public class TaskActivity extends AppCompatActivity {
                         connection.setRequestProperty("Content-type", "application/json");
                         connection.setRequestProperty("Accept", "application/json");
                         connection.connect();
-
                         responseCode = connection.getResponseCode();
                         Log.i("responsecode", "The responsecode was: " + responseCode);
-
-
                         BufferedReader in3 = new BufferedReader(new InputStreamReader(connection.getInputStream()));
                         String inputLine3;
                         StringBuffer response3 = new StringBuffer();
-
                         while ((inputLine3 = in3.readLine()) != null) {
                             response3.append(inputLine3);
                         }
@@ -243,7 +219,6 @@ public class TaskActivity extends AppCompatActivity {
                     default:
                         break;
                 }
-
             } catch (ProtocolException e) {
                 e.printStackTrace();
             } catch (IOException e) {
@@ -251,11 +226,8 @@ public class TaskActivity extends AppCompatActivity {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-
             return null;
-
         }
-
         @Override
         protected void onPostExecute(String result){
             tasks.clear();
@@ -274,23 +246,21 @@ public class TaskActivity extends AppCompatActivity {
                 }
                 tasks.add(t);
             }
-
             setListAdapter();
             arrayAdapter.notifyDataSetChanged();
         }
     }
-    private class PersonArrayAdapter extends ArrayAdapter<Task> {
+    private class TaskArrayAdapter extends ArrayAdapter<Task> {
 
         private final Context context;
         private final ArrayList<Task> personList;
 
-        public PersonArrayAdapter(Context context, int resource, List<Task> persons) {
+        public TaskArrayAdapter(Context context, int resource, List<Task> persons) {
 
             super(context, resource, tasks);
             this.context = context;
             this.personList = (ArrayList)tasks;
         }
-        //Obligatory function for ArrayAdapter
         @Override
         public View getView(int position, View convertView, ViewGroup parent){
             LayoutInflater inflater = (LayoutInflater) context
@@ -299,9 +269,11 @@ public class TaskActivity extends AppCompatActivity {
             TextView firstnameTextView = (TextView)itemView.findViewById(R.id.nameOfListTextView);
             firstnameTextView.setText(tasks.get(position).getTitle());
             return itemView;
-
         }
     }
+    /**
+     * Initialises needed variables
+     */
     public void init(){
         lists2 = new JSONArray();
         taskActivity = this;
@@ -324,8 +296,13 @@ public class TaskActivity extends AppCompatActivity {
             }
         });
     }
+    /**
+     * Get's the info needed to create a new task
+     * @param titleFromFragment the title taken from the AddListItemFragment
+     * @param descriptionFromFragment description taken from AddListItemFragment
+     * @param checkFromFragment the state of checkbox taken from AddListItemFragment
+     */
     public void getInfoForNewTask(String titleFromFragment,String descriptionFromFragment,boolean checkFromFragment){
-
         if(checkFromFragment){
             isCheck = "true";
         }
@@ -340,8 +317,13 @@ public class TaskActivity extends AppCompatActivity {
         t6.execute("GET", "lists/"+position+"/tasks/");
         arrayAdapter.notifyDataSetChanged();
     }
+    /**
+     * Gets info for when the User Edits a Task
+     * @param titleFromFragment the title from the AddListItemFragment
+     * @param descriptionFromFragment description from AddListItemFragment
+     * @param checkFromFragment the state of the checkbox from the AddListItemFragment
+     */
     public void getInfoForEditTask(String titleFromFragment,String descriptionFromFragment,boolean checkFromFragment){
-
         if(checkFromFragment){
             isCheck = "true";
         }
@@ -356,6 +338,10 @@ public class TaskActivity extends AppCompatActivity {
         t7.execute("GET", "lists/"+position+"/tasks/");
         arrayAdapter.notifyDataSetChanged();
     }
+    /**
+     *Method for hiding the soft-keyboard after user has pressed , yes after creating a new listItem
+     * @param input the EditText which keyboard you want to close
+     */
     protected void hideSoftKeyboard(EditText input) {
         input.setInputType(0);
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -372,17 +358,31 @@ public class TaskActivity extends AppCompatActivity {
             Log.i("TAG","NOTHING IN BUNDLE");
         }
         Log.i("TAG", "postition is" + position);
-
     }
-    // User pressed yes in delete dialog fragment!
+    /**
+     * Fuction to remove task after user confirms deletion of task in the DeleteDialogFragment
+     */
     public void pressedYes(){
         MyTask t2 = new MyTask();
-        t2.execute("DELETE", "lists/" + position + "/tasks/" + tasks.get(positionInList).getId() + "/"); // 33/ för min lista
+        t2.execute("DELETE", "lists/" + position + "/tasks/" + tasks.get(positionInList).getId() + "/");
         arrayAdapter.clear();
         arrayAdapter.notifyDataSetChanged();
         MyTask t3 = new MyTask();
         setListAdapter();
         t3.execute("GET", "lists/"+position+"/tasks/");
         arrayAdapter.notifyDataSetChanged();
+    }
+    /**
+     * @param response String buffer response from a HTTP request
+     * @return true if response is null, false if it isn't
+     */
+    protected boolean isResponseNull(StringBuffer response){
+        String nill = "";
+        if(!response.toString().equals(nill)) {
+            return false;
+        }
+        else{
+            return true;
+        }
     }
 }

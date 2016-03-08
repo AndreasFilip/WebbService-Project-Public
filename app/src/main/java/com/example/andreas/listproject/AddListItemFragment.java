@@ -18,7 +18,7 @@ import butterknife.ButterKnife;
 
 
 /**
- * A simple {@link Fragment} subclass.
+ * Fragment for adding a task or list
  */
 public class AddListItemFragment extends Fragment {
 

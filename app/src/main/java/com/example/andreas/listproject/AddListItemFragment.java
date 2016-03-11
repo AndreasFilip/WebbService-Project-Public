@@ -20,7 +20,7 @@ public class AddListItemFragment extends Fragment {
     @Bind(R.id.buttonCancel)
     Button cancelButton;
     @Bind(R.id.textViewTop)
-    TextView toptextView;
+    TextView topTextView;
     @Bind(R.id.editText2)
     EditText description;
     @Bind(R.id.editText)
@@ -173,14 +173,14 @@ public class AddListItemFragment extends Fragment {
         return title.getText().toString().equals(taskActivity.title) && description.getText().toString().equals(taskActivity.description) && (isBothCheckedOrNot() == 1 || isBothCheckedOrNot() == 2);
     }
     private void setUpForFragmentTasksAdd(){
-        toptextView.setText(R.string.EnterNameofTask);
+        topTextView.setText(R.string.EnterNameofTask);
         title.setHint(R.string.title);
         description.setVisibility(View.VISIBLE);
         checkBox.setVisibility(View.VISIBLE);
         addButton.setText(R.string.addTask);
     }
     private void setUpForFragmentTasksEdit(){
-        toptextView.setText(R.string.EnterNameofTask);
+        topTextView.setText(R.string.EnterNameofTask);
         title.setText(R.string.title);
         description.setVisibility(View.VISIBLE);
         checkBox.setVisibility(View.VISIBLE);

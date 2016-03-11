@@ -3,7 +3,7 @@ package com.example.andreas.listproject;
 import android.os.Parcel;
 import android.os.Parcelable;
 /**
- * List
+ * Class for ToDoLists
  */
 public class ToDoList implements Parcelable{
 

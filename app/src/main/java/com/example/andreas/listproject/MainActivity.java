@@ -40,12 +40,12 @@ public class MainActivity extends AppCompatActivity {
     //New comment to verify that branch is created
     @Bind(R.id.addButton) Button addButton;
     @Bind(R.id.listView) ListView listView;
-    String editTextStringForNewList;
-    int positionInList;
+    private String editTextStringForNewList;
+    private int positionInList;
     ArrayAdapter arrayAdapter;
-    protected ArrayList<ToDoList> toDoLists;
-    protected JSONArray lists;
-    protected JSONObject listsWithName;
+    private ArrayList<ToDoList> toDoLists;
+    private JSONArray lists;
+    private JSONObject listsWithName;
     MainActivity mainActivity;
     android.support.v4.app.FragmentManager fm;
     android.support.v4.app.DialogFragment removeListItemFragment;
@@ -283,14 +283,6 @@ public class MainActivity extends AppCompatActivity {
         input.setInputType(0);
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(input.getWindowToken(), 0);
-    }
-    /**
-     * Method for retrieving a FragmentManager in a Fragment
-     * @return A FragmentManager
-     */
-    protected FragmentManager getFm(){
-        fm = getSupportFragmentManager();
-        return fm;
     }
     /**
      * @param response String buffer response from a HTTP request

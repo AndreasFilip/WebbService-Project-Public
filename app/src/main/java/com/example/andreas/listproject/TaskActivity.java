@@ -45,11 +45,11 @@ public class TaskActivity extends AppCompatActivity {
     String position;
     @Bind(R.id.addButton) Button addButton;
     @Bind(R.id.listView) ListView listView;
-    int positionInList;
+    protected int positionInList;
     ArrayAdapter arrayAdapter;
-    protected ArrayList<Task> tasks;
-    protected JSONArray lists2;
-    protected JSONObject listsWithName;
+    private ArrayList<Task> tasks;
+    private JSONArray lists2;
+    private JSONObject listsWithName;
     android.support.v4.app.FragmentManager fm;
     @Override
     protected void onCreate(Bundle savedInstanceState) {

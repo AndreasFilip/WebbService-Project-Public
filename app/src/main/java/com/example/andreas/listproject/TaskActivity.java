@@ -27,7 +27,6 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
-import java.net.ProtocolException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -101,11 +100,9 @@ public class TaskActivity extends AppCompatActivity {
         });
     }
     private class MyTask extends AsyncTask<String, Void, String>{
-
         HttpURLConnection connection;
         URL url;
         private String URLEN = "http://api.cmdemo.se/";
-
         @Override
         protected void onPreExecute(){
         }
@@ -165,7 +162,7 @@ public class TaskActivity extends AppCompatActivity {
                         os.close();
                         BufferedReader in2 = new BufferedReader(new InputStreamReader(connection.getInputStream()));
                         String inputLine2;
-                        StringBuffer response2 = new StringBuffer();
+                        StringBuilder response2 = new StringBuilder();
                         while ((inputLine2 = in2.readLine()) != null) {
                             response2.append(inputLine2);
                         }
@@ -191,7 +188,7 @@ public class TaskActivity extends AppCompatActivity {
                         os1.close();
                         BufferedReader in4 = new BufferedReader(new InputStreamReader(connection.getInputStream()));
                         String inputLine4;
-                        StringBuffer response4 = new StringBuffer();
+                        StringBuilder response4 = new StringBuilder();
                         while ((inputLine4 = in4.readLine()) != null) {
                             response4.append(inputLine4);
                         }
@@ -208,7 +205,7 @@ public class TaskActivity extends AppCompatActivity {
                         Log.i("responsecode", "The responsecode was: " + responseCode);
                         BufferedReader in3 = new BufferedReader(new InputStreamReader(connection.getInputStream()));
                         String inputLine3;
-                        StringBuffer response3 = new StringBuffer();
+                        StringBuilder response3 = new StringBuilder();
                         while ((inputLine3 = in3.readLine()) != null) {
                             response3.append(inputLine3);
                         }
@@ -219,11 +216,7 @@ public class TaskActivity extends AppCompatActivity {
                     default:
                         break;
                 }
-            } catch (ProtocolException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (JSONException e) {
+            } catch (IOException | JSONException e) {
                 e.printStackTrace();
             }
             return null;
@@ -283,7 +276,6 @@ public class TaskActivity extends AppCompatActivity {
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Create new fragment and transaction
                 Fragment addTaskItemFragment = new AddListItemFragment();
                 FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
                 Bundle bundle = new Bundle();
@@ -377,12 +369,6 @@ public class TaskActivity extends AppCompatActivity {
      * @return true if response is null, false if it isn't
      */
     protected boolean isResponseNull(StringBuffer response){
-        String nill = "";
-        if(!response.toString().equals(nill)) {
-            return false;
-        }
-        else{
-            return true;
-        }
+        return response.toString().equals("");
     }
 }

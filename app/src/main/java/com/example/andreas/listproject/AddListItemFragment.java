@@ -16,7 +16,6 @@ import android.widget.Toast;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-
 /**
  * Fragment for adding a task or list
  */
@@ -113,7 +112,7 @@ public class AddListItemFragment extends Fragment {
                 addButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if (title.getText().toString() == taskActivity.title && description.getText().toString() == taskActivity.description && isBothCheckedOrNot() == 1 || isBothCheckedOrNot() == 2) {
+                        if (title.getText().toString() == taskActivity.title && description.getText().toString() == taskActivity.description && (isBothCheckedOrNot() == 1 || isBothCheckedOrNot() == 2)) {
                             Toast.makeText(getActivity(), R.string.toastTextisTheSame, Toast.LENGTH_SHORT).show();
                             hideViewsAndGoBack();
                         } else {

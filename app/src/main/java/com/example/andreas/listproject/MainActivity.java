@@ -153,7 +153,7 @@ public class MainActivity extends AppCompatActivity {
                         os.close();
                         BufferedReader in2 = new BufferedReader(new InputStreamReader(connection.getInputStream()));
                         String inputLine2;
-                        StringBuffer response2 = new StringBuffer();
+                        StringBuilder response2 = new StringBuilder();
                         while ((inputLine2 = in2.readLine()) != null) {
                             response2.append(inputLine2);
                         }
@@ -169,7 +169,7 @@ public class MainActivity extends AppCompatActivity {
                         Log.i("responsecode", "The responsecode was: " + responseCode);
                         BufferedReader in3 = new BufferedReader(new InputStreamReader(connection.getInputStream()));
                         String inputLine3;
-                        StringBuffer response3 = new StringBuffer();
+                        StringBuilder response3 = new StringBuilder();
 
                         while ((inputLine3 = in3.readLine()) != null) {
                             response3.append(inputLine3);
@@ -181,11 +181,7 @@ public class MainActivity extends AppCompatActivity {
                     default:
                         break;
                 }
-            } catch (ProtocolException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (JSONException e) {
+            } catch (IOException | JSONException e) {
                 e.printStackTrace();
             }
             return null;
@@ -301,12 +297,6 @@ public class MainActivity extends AppCompatActivity {
      * @return true if response is null, false if it isn't
      */
     protected boolean isResponseNull(StringBuffer response){
-        String nill = "";
-        if(!response.toString().equals(nill)) {
-            return false;
-        }
-        else{
-            return true;
-        }
+        return response.toString().equals("");
     }
 }

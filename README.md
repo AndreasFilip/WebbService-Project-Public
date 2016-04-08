@@ -1,2 +1,2 @@
 # ToDoListProdject
-School prodject to acces and use a server api
+School project I did to acess a custom API for making TODO-lists
